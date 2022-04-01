@@ -1,0 +1,24 @@
+Welcome to the world of concurrent data structures! :)
+
+Well, this was the sentence that opened my first homework assignment about concurrency. I liked this assignment so much, because it had almost everything you can think about: managing readers and writers, preventing obvious situations of deadlocks, preventing less obvious situations of deadlocks, different kinds of (logical) data structures, and so forth. And, all of this is achieved by the following requirements:
+
+1. Implement a doubly-linked list that supports the search and deletion of an item (both operations start from the head of the list), as well as two insertion operations - one starts from the head, and the other from the tail.
+1.5 No global lock on the list is allowed!
+2. In order to make the work simultaneous, each node contains a fair read/may-write/write lock. If you are only reading, take it in read mode. Only writing? Write mode. Not sure yet? Take it in may-write mode, and if you need to write, ask for an upgrade. The lock is fair, so if you had the lock, you won't lose it for other waiting threads.
+
+All of the specifics can be seen in the above PDF file.
+
+I chose to re-do it, but this time, in C++ (original assignment was in C). I used some of the C++17 standard's features, such as scoped_lock, and [[fallthrough]]. I left some very obvious assertions in the code, but mostly, made sure to document as much as I can (like I always do). I want to stress that there was not much attention here for checking the validity of the arguments, in order to save some time (and because the subject of this exercise is multi-threading). Make sure to read the @attention section above some of the methods, to learn about the assumptions made.
+
+This is, of course, probably not the ideal solution for this kind of data-structure, but I chose to followed the exercise instructions strictly (almost) for the sake of practice, because I think it poses a great deal of issues that arise when working on a multi-threaded module.
+
+
+How did I prepared the test executable? First, it has some hard-coded global parameters in the source file test.cpp. One can change them. I ran on Ubuntu (gcc version 9.4.0) the following command:
+
+g++ -std=c++17 -pthread -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -Werror -O3 *.cpp -o Test.exe
+
+Notice:
+* -std=c++17 is essential.
+* -pthread is essential on Linux.
+* If you wish to debug, change -O3 to -g.
+* All other flags are some general flags I use in order to write reliable code. Some of them have no effect.
